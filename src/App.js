@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { Router, Route, Link, Switch } from "react-router-dom";
+import browserHistory from "./browserHistory";
+import { inventoryManagement } from "./routing";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { Login } from "./pages";
+
+const theme = createMuiTheme({
+  palette: {
+    type: "dark",
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider theme={theme}>
+      <Router history={browserHistory}>
+        <Switch>
+          {inventoryManagement}
+          <Route path="/" key="login" component={Login} />,
+          <Route exact key="*" path="*">
+            <NoMatch />
+          </Route>
+        </Switch>
+      </Router>
+    </MuiThemeProvider>
   );
 }
 
 export default App;
+
+const NoMatch = () => {
+  return <h1>No Match</h1>;
+};

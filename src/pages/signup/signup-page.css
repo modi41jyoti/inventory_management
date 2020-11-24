@@ -1,0 +1,20 @@
+input,
+select {
+  display: flex;
+  justify-content: center;
+  width: 50vh;
+  height: 4vh;
+  margin: 0px 1vw 1vw 3vw;
+  color: black;
+}
+
+select {
+  width: 51vh;
+  height: 5vh;
+}
+
+.requireMsg {
+  color: red;
+  padding-left: 3vw;
+  margin: -1vh 0 3vh 0;
+}

@@ -1,149 +1,135 @@
-import { Grid, Avatar, Paper, Button, Typography } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Grid, Paper, Typography } from "@material-ui/core";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { userAdmin } from "../../services/user.service.js";
+import ErrorMessage from "../../services/errorMessage";
 import ownerImage from "../../assest/login-clipart-user.jpg";
 import linkedinImage from "../../assest/linkedin.png";
 import googleImage from "../../assest/google.png";
 import facebookImage from "../../assest/facebook.jpeg";
 import browserHistory from "browserHistory";
 
-const useStyles = makeStyles((theme: Theme) => {
-  createStyles({
-    root: {
-      "& MuiTextField-root": {
-        margin: theme.spacing(5),
-        width: "25ch",
-        color: "#ba000d",
-      },
-    },
-  });
-});
-
-const LoginPageComponent = () => {
-  const classes = useStyles();
+const LoginPageComponent = (props) => {
+  const {
+    register,
+    handleSubmit,
+    errors,
+    formState: { isSubmitting },
+  } = useForm();
+  const { singedUpEmail, passwordVerification } = props;
   return (
     <Paper style={{ minHeight: "100vh" }}>
-      <Grid container>
+      <Grid container style={{ overflow: "hidden" }}>
         <Grid item xs={4} />
         <Grid item xs={4}>
-          <Grid container direction="row">
-            <Grid
-              item
-              direction="row"
+          <form
+            onSubmit={handleSubmit(userAdmin)}
+            style={{
+              boxShadow: "0 0 40px 10px black",
+              overflow: "hidden",
+              margin: "5vw 0 1vw 0",
+            }}
+          >
+            <Typography
               style={{
-                boxShadow: "0px 0px 10px 15px black",
-                // display: "flex",
+                display: "flex",
                 justifyContent: "center",
-                marginTop: "10vh",
+                margin: "2vw 0 2vw 0",
+                padding: "0 0 0 0",
+                fontSize: "2vw",
               }}
             >
-              <Grid
-                container
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <Avatar
-                  alt="loginImage"
-                  src={ownerImage}
-                  style={{ width: "8vh", height: "8vh", margin: "5vw 0 2vw 0" }}
-                ></Avatar>
-              </Grid>
-
-              <form className={classes.root} noValidate autoComplete="off">
-                <Grid container>
-                  <TextField
-                    required
-                    id="outline-required"
-                    label="Email"
-                    variant="outlined"
-                    style={{ width: "50vh", margin: "0px 1vw 0px 1vw" }}
-                  />
-                </Grid>
-                <Typography
-                  onClick={() => {
-                    browserHistory.push("./restPassword");
-                  }}
-                  color="textSecondary"
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    lineHeight: "35px",
-                    fontSize: "2vh",
-                    margin: "0px 1vw 0px 0px",
-                  }}
-                >
-                  Forget Password ?
-                </Typography>
-                <TextField
-                  required
-                  id="standard-password-input"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  variant="outlined"
-                  style={{
-                    width: "50vh",
-                    marginBottom: "2vh",
-                    margin: "0px 1vw 0px 1vw",
-                  }}
-                />
-              </form>
-              <Grid
-                container
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "1vw",
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    browserHistory.push("./invertoryPage");
-                  }}
-                  variant="contained"
-                  color="primary"
-                >
-                  LogIn
-                </Button>
-              </Grid>
-              <Typography
-                variant="h3"
-                style={{
-                  fontSize: "2vh",
-                  margin: "1vw 0 1vw 0",
-                  textAlign: "center",
-                }}
-              >
-                Don't have account? &nbsp;
-                <span
-                  onClick={() => {
-                    browserHistory.push("./signup");
-                  }}
-                >
-                  SignUp
-                </span>
+              Login page
+            </Typography>
+            <input
+              type="image"
+              src={ownerImage}
+              alt="ownerImage"
+              style={{
+                width: "3vw",
+                height: "3vw",
+                borderRadius: "50%",
+                marginLeft: "15vw",
+              }}
+            />
+            <input
+              ref={register({
+                required: "first signup please",
+                validate: { singedUpEmail },
+              })}
+              name="email"
+              placeholder="Email | UserName"
+              type="text"
+            />
+            <ErrorMessage error={errors.email} />
+            {errors.email && (
+              <Typography style={{ color: "red", margin: "-1vw 0 1vw 2.8vw" }}>
+                you are not signed up
               </Typography>
-              <Grid
-                container
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "4vh",
-                }}
-              >
-                <Avatar
-                  alt="linkedinImage"
-                  src={linkedinImage}
-                  style={{ marginRight: "1vw" }}
-                ></Avatar>
-                <Avatar
-                  alt="googleImage"
-                  src={googleImage}
-                  style={{ marginRight: "1vw" }}
-                ></Avatar>
-                <Avatar alt="facebookImage" src={facebookImage}></Avatar>
-              </Grid>
+            )}
+            <Grid container style={{ margin: "0 0 1vh 20vw" }}>
+              Forget Password?
             </Grid>
-          </Grid>
+            <input
+              ref={register({
+                required: "check your password",
+                validate: { passwordVerification },
+              })}
+              name="password"
+              placeholder="Password"
+              type="password"
+              // defaultValue="Aa@123456"
+            />
+            <ErrorMessage error={errors.password} />
+            {errors.password && (
+              <Typography style={{ color: "red", margin: "-2vh 0 1vh 5.5vh" }}>
+                Wrong Password
+              </Typography>
+            )}
+            <input
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                width: "26.6vw",
+                height: "5vh",
+                margin: "0 0 0 5.5vh",
+              }}
+            />
+            <Grid style={{ textAlign: "center", margin: "2vh 0 2vh 0" }}>
+              Don't have account?
+              <span
+                onClick={() => {
+                  browserHistory.push("./signup");
+                }}
+                style={{ color: "green", fontSize: "2vh" }}
+              >
+                SignUp
+              </span>
+            </Grid>
+            <Grid
+              container
+              style={{ display: "flex", justifyContent: "Center" }}
+            >
+              <input
+                type="image"
+                src={linkedinImage}
+                alt="linkedinImage"
+                style={{ width: "3vw", height: "3vw" }}
+              />
+              <input
+                type="image"
+                src={googleImage}
+                alt="googleImage"
+                style={{ width: "3vw", height: "3vw", borderRadius: "50%" }}
+              />
+              <input
+                type="image"
+                src={facebookImage}
+                alt="facebookImage"
+                style={{ width: "3vw", height: "3vw", borderRadius: "50%" }}
+              />
+            </Grid>
+          </form>
         </Grid>
       </Grid>
     </Paper>
